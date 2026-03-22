@@ -167,12 +167,57 @@ public class ContaTests
 
     // =======================================================
     //  Testes para Transferir
-    //  Sugestão de testes:
-    //    - Transferência válida atualiza saldo de ambas as contas
-    //    - Transferência com saldo insuficiente lança exceção
-    //    - Transferência com valor zero/negativo lança exceção
-    //    - Transferência com conta origem inativa lança exceção
-    //    - Transferência com conta destino inativa lança exceção
+    [Fact]
+    public void Transferir_ValorValido_AtualizaSaldoDeAmbasContas()
+    {
+        var origem = new Conta("Maria", 200);
+        var destino = new Conta("João", 100);
+
+        origem.Transferir(destino, 50);
+
+        Assert.Equal(150, origem.Saldo);
+        Assert.Equal(150, destino.Saldo);
+    }
+
+    [Fact]
+    public void Transferir_SaldoInsuficiente_LancaInvalidOperationException()
+    {
+        var origem = new Conta("Maria", 100);
+        var destino = new Conta("João", 100);
+
+        Assert.Throws<InvalidOperationException>(() => origem.Transferir(destino, 150));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-50)]
+    public void Transferir_ValorZeroOuNegativo_LancaArgumentException(decimal valor)
+    {
+        var origem = new Conta("Maria", 200);
+        var destino = new Conta("João", 100);
+
+        Assert.Throws<ArgumentException>(() => origem.Transferir(destino, valor));
+    }
+
+    [Fact]
+    public void Transferir_ContaOrigemInativa_LancaInvalidOperationException()
+    {
+        var origem = new Conta("Maria", 0);
+        origem.Encerrar();
+        var destino = new Conta("João", 100);
+
+        Assert.Throws<InvalidOperationException>(() => origem.Transferir(destino, 50));
+    }
+
+    [Fact]
+    public void Transferir_ContaDestinoInativa_LancaInvalidOperationException()
+    {
+        var origem = new Conta("Maria", 200);
+        var destino = new Conta("João", 0);
+        destino.Encerrar();
+
+        Assert.Throws<InvalidOperationException>(() => origem.Transferir(destino, 50));
+    }
     // =======================================================
 
 
