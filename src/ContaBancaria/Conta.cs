@@ -78,8 +78,13 @@ public class Conta
     /// </summary>
     public void Transferir(Conta destino, decimal valor)
     {
-        // TODO: Implemente usando TDD
-        throw new NotImplementedException();
+        if (valor <= 0) throw new ArgumentException("O valor da transferência deve ser maior que zero.", nameof(valor));
+        if (!Ativa) throw new InvalidOperationException("A conta de origem está inativa.");
+        if (!destino.Ativa) throw new InvalidOperationException("A conta de destino está inativa.");
+        if (valor > Saldo) throw new InvalidOperationException("Saldo insuficiente para a transferência.");
+
+        this.Sacar(valor);
+        destino.Depositar(valor);
     }
 
     /// <summary>
