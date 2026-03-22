@@ -94,9 +94,11 @@ public class Conta
     ///   - O saldo deve ser zero para encerrar (lançar InvalidOperationException se houver saldo).
     ///   - A propriedade Ativa deve ser alterada para false.
     /// </summary>
-    public void Encerrar()
+     public void Encerrar()
     {
-        // TODO: Implemente usando TDD
-        throw new NotImplementedException();
+        if (!Ativa) throw new InvalidOperationException("A conta já está inativa.");
+        if (Saldo > 0) throw new InvalidOperationException("O saldo deve ser zero para encerrar a conta.");
+        
+        Ativa = false;
     }
 }
