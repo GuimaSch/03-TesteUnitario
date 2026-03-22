@@ -61,8 +61,11 @@ public class Conta
     /// </summary>
     public void Sacar(decimal valor)
     {
-        // TODO: Implemente usando TDD
-        throw new NotImplementedException();
+        if (valor <= 0) throw new ArgumentException("O valor do saque deve ser maior que zero.", nameof(valor));
+        if (!Ativa) throw new InvalidOperationException("Não é possível sacar de uma conta inativa.");
+        if (valor > Saldo) throw new InvalidOperationException("Saldo insuficiente para o saque.");
+
+        Saldo -= valor;
     }
 
     /// <summary>
