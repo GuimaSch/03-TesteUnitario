@@ -223,11 +223,30 @@ public class ContaTests
 
     // =======================================================
     //  Testes para Encerrar
-    //  Sugestão de testes:
-    //    - Encerrar conta com saldo zero funciona
-    //    - Encerrar conta com saldo lança InvalidOperationException
-    //    - Encerrar conta já inativa lança InvalidOperationException
-    //    - Conta encerrada tem Ativa == false
+    [Fact]
+    public void Encerrar_SaldoZero_DesativaConta()
+    {
+        var conta = new Conta("Maria", 0);
+        conta.Encerrar();
+        Assert.False(conta.Ativa);
+    }
+
+    [Fact]
+    public void Encerrar_ComSaldo_LancaInvalidOperationException()
+    {
+        var conta = new Conta("Maria", 100);
+        Assert.Throws<InvalidOperationException>(() => conta.Encerrar());
+    }
+
+    [Fact]
+    public void Encerrar_ContaJaInativa_LancaInvalidOperationException()
+    {
+        var conta = new Conta("Maria", 0);
+        conta.Encerrar(); // Primeira vez encerra com sucesso
+
+        Assert.Throws<InvalidOperationException>(() => conta.Encerrar()); // Segunda vez deve falhar
+    }
+}
     // =======================================================
 
-}
+
